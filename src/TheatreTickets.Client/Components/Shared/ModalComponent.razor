@@ -1,0 +1,83 @@
+﻿<div id="ModalCenter"
+     data-backdrop="static"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="ModalCenterTitle"
+     class="@(show ? classShow : classHide)"
+     style="@(show ? styleShow : styleHide)"
+     aria-hidden="@(show ? "false": "true")"
+     aria-modal="@(show ? "true" : "false")">
+
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<h5 class="modal-title" id="ModalCenterTitle">@Title</h5>*@
+                @if (string.IsNullOrEmpty(Title))
+                {
+                    @HeaderContent
+                }
+                else
+                {
+                    <h5 class="modal-title" id="ModalCenterTitle">@Title</h5>
+                }
+                <button type="button" class="close" @onclick="Hide" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if (string.IsNullOrEmpty(Message))
+                {
+                    @BodyContent
+                }
+                else
+                {
+                    @Message
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="Hide">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Title { get; set; } = "";
+
+    private string Message { get; set; } = "";
+
+    private bool show { get; set; } = false;
+
+    private const string classShow = "modal fade show";
+    private const string classHide = "modal fade";
+    private const string styleShow = "display: block; background-color: rgba(0, 0, 0, 0.3);";
+    private const string styleHide = "display: none;";
+
+    [Parameter] public RenderFragment HeaderContent { get; set; }
+    [Parameter] public RenderFragment BodyContent { get; set; }
+
+    public void Show(string title, string message)
+    {
+        Title = title;
+        Message = message;
+        HeaderContent = null;
+        BodyContent = null;
+        show = true;
+        StateHasChanged();
+    }
+
+    public void Show()
+    {
+        Title = null;
+        Message = null;
+
+        show = true;
+        StateHasChanged();
+    }
+
+    public void Hide()
+    {
+        show = false;
+        StateHasChanged();
+    }
+}

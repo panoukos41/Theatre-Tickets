@@ -1,0 +1,34 @@
+﻿nav {
+    @extend .navbar;
+    @extend .fixed-top;
+    @extend .nav-fill;
+    @extend .navbar-expand-sm;
+    @extend .navbar-light;
+    @extend .bg-light;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+nav > a {
+    @extend .navbar-brand;
+}
+
+nav > button {
+    @extend .navbar-toggler;
+}
+
+nav > div {
+    @extend .navbar-collapse;
+}
+
+nav > div > ul {
+    @extend .navbar-nav;
+}
+
+nav > div > ul > li{
+    @extend .nav-item;
+    @extend .px-3;
+}
+
+nav > div > ul > li > a {
+    @extend .nav-link
+}

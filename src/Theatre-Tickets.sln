@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{03B62151-E1C3-4522-A042-D9B79535DDBA}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheatreTickets.Models", "TheatreTickets.Models\TheatreTickets.Models.csproj", "{8EA4EBBC-48D3-4443-9056-6C4CE2EE011C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheatreTickets.Client", "TheatreTickets.Client\TheatreTickets.Client.csproj", "{77554C12-4155-4527-86E1-D4189D186108}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8EA4EBBC-48D3-4443-9056-6C4CE2EE011C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EA4EBBC-48D3-4443-9056-6C4CE2EE011C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EA4EBBC-48D3-4443-9056-6C4CE2EE011C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EA4EBBC-48D3-4443-9056-6C4CE2EE011C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77554C12-4155-4527-86E1-D4189D186108}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77554C12-4155-4527-86E1-D4189D186108}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77554C12-4155-4527-86E1-D4189D186108}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77554C12-4155-4527-86E1-D4189D186108}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E40F2E68-035B-4542-8980-1EB716D0C01A}
+	EndGlobalSection
+EndGlobal

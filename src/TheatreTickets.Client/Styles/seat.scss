@@ -1,0 +1,19 @@
+﻿.seat {
+    float: left;
+    width: 20px;
+    height: 20px;
+    margin: 1px;
+    border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.seat-bg-red {
+    background: #ff0000;
+}
+
+.seat-bg-green {
+    background: #00ff21;
+}
+
+.seat-selected {
+    background: #0094ff;
+}

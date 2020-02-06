@@ -1,0 +1,28 @@
+﻿<BSModal @ref="modal" IsCentered="true" Size="Size.Large">
+    <BSModalHeader OnClick="@onToggle">
+        <h3>Hall: @Hall?.Name</h3>
+    </BSModalHeader>
+    <BSModalBody>
+        <CarouselComponent CarouselId="hall-modal-carousel"
+                           ImagesUrls="Hall?.ImagesUrls ?? new List<string>()"
+                           MaxHeight="250px" />
+        <br />
+        <h5>Seats: @Hall?.Seats.Count</h5>
+        <br />
+        <SeatsComponent Seats="Hall?.Seats ?? new List<Seat>()" />
+    </BSModalBody>
+</BSModal>
+
+@code {
+    private Hall Hall { get; set; } = null!;
+
+    private BSModal modal;
+
+    private void onToggle(MouseEventArgs e) => modal.Toggle();
+
+    public void Show(Hall hall)
+    {
+        Hall = hall;
+        modal.Toggle();
+    }
+}

@@ -1,0 +1,34 @@
+﻿<div class="border-0 @Class" style="@Style" disabled="@(SeatsRemaining == 0)">
+    <BSButton IsOutline="true"
+              OnClick="() => OnHallClick.InvokeAsync(PlayDateTime.Hall)">
+        Hall: @PlayDateTime.Hall.Name
+    </BSButton>
+
+    <BSCard CardType="CardType.Text">Date: @PlayDateTime.DateTime.ToShortDateString()</BSCard>
+    <BSCard CardType="CardType.Text">Time: @PlayDateTime.DateTime.ToShortTimeString()</BSCard>
+    <BSCard CardType="CardType.Text">Seats remaining: @(PlayDateTime.Hall.Seats.Count - PlayDateTime.SeatsTaken.Count)</BSCard>
+
+    <BSButton Class="@(SeatsRemaining == 0 ? "disabled" : null)"
+              IsDisabled="@(SeatsRemaining == 0)"
+              OnClick="() => OnBuyTicketClick.InvokeAsync(PlayDateTime)">
+        Buy Ticket!
+    </BSButton>
+    <BSCard CardType="CardType.Text"></BSCard>
+    <BSCard CardType="CardType.Text"></BSCard>
+</div>
+
+@code {
+    [Parameter] public PlayDateTime PlayDateTime { get; set; }
+
+    [Parameter] public bool IsSelected { get; set; }
+
+    [Parameter] public EventCallback<Hall> OnHallClick { get; set; }
+
+    [Parameter] public EventCallback<PlayDateTime> OnBuyTicketClick { get; set; }
+
+    [Parameter] public string Class { get; set; }
+
+    [Parameter] public string Style { get; set; }
+
+    private int SeatsRemaining => PlayDateTime.Hall.Seats.Count - PlayDateTime.SeatsTaken.Count;
+}

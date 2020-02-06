@@ -1,0 +1,19 @@
+﻿<BSTable IsBorderless="true" IsResponsive="true" IsSmall="true">
+    <tbody>
+        <ListView Items="Rows" Context="Row">
+            <tr class="m-0">
+                <ListView Items="Row.ToList()" Context="Seat">
+                    <td class="m-0">
+                        <SeatComponent Seat="Seat"/>
+                    </td>
+                </ListView>
+            </tr>
+        </ListView>
+    </tbody>
+</BSTable>
+
+@code{
+    [Parameter] public IEnumerable<Seat> Seats { get; set; }
+
+    private IEnumerable<IGrouping<int, Seat>> Rows => Seats.GroupBy(x => x.Row);
+}

@@ -1,0 +1,79 @@
+﻿@page "/play/{Id}"
+
+@if (Current != null)
+{
+    <BSCard Class="border-0">
+        <BSCard CardType="CardType.Body">
+            @* Title *@
+            <BSCard CardType="CardType.Title">@Current.Name</BSCard>
+
+            @* Carousel *@
+            <CarouselComponent CarouselId="playCarousel"
+                               ImagesUrls="Current.ImagesUrls"
+                               MaxHeight="55vh"
+                               Alt="Play image!" />
+
+            @* Info *@
+            <BSCard CardType="CardType.Text">@Current.Description</BSCard>
+            <BSCard CardType="CardType.Text">Duration: @Current.Duration hours!</BSCard>
+            <BSButton IsOutline="true" OnClick="() => HandleTheatreClick()">At @Current.Theatre.Name</BSButton>
+            <hr />
+
+            @* Title Bottom *@
+            <BSCard CardType="CardType.Title">Dates and times available!</BSCard>
+
+            @* List of date times *@
+            <ul class="list-group list-group-horizontal overflow-auto">
+                <ListView Items="Current.PlayDateTimes" Context="playDateTime">
+                    <li class="list-group-item">
+                        <PlayDateTimeComponent PlayDateTime="playDateTime"
+                                               Style="min-width: 220px; min-height: 100%"
+                                               OnHallClick="hallmodal.Show"
+                                               OnBuyTicketClick="() => buyticket.Show(playDateTime)" />
+                    </li>
+                </ListView>
+            </ul>
+        </BSCard>
+    </BSCard>
+}
+else
+{
+    <LoadingComponent />
+}
+
+<HallModalViewComponent @ref="hallmodal" />
+<BuyTicketModalComponent @ref="buyticket" OnClosed="() => StateHasChanged()" />
+
+@code {
+    [Parameter] public string Id { get; set; }
+
+    [Inject] IPlayRepo PlayRepo { get; set; }
+    [Inject] ITheatreRepo TheatreRepo { get; set; }
+    [Inject] IPlayDateTimeRepo PlayDateTimeRepo { get; set; }
+    [Inject] IHallRepo HallRepo { get; set; }
+    [Inject] NavigationManager navigation { get; set; }
+
+    public Play Current { get; set; }
+
+    HallModalViewComponent hallmodal;
+    BuyTicketModalComponent buyticket;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id != null)
+        {
+            Current = await PlayRepo.Get(Id);
+            Current.Theatre = await TheatreRepo.Get(Current.TheatreId);
+            Current.PlayDateTimes = (await PlayDateTimeRepo.Get(Current.PlayDateTimesIds)).ToList();
+
+            foreach (PlayDateTime item in Current.PlayDateTimes)
+            {
+                item.Play = Current;
+                item.Hall = await HallRepo.Get(item.HallId);
+            }
+        }
+    }
+
+    private void HandleTheatreClick()
+        => navigation.Navigate($"theatre/{Current.TheatreId}");
+}

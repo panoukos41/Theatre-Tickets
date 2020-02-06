@@ -1,0 +1,98 @@
+﻿@page "/theatre/{Id}"
+
+@if (Current != null)
+{
+    <BSCard Class="border-0" CardType="CardType.Body">
+
+        @* Title *@
+        <BSCard CardType="CardType.Title">@Current.Name</BSCard>
+
+        @* Carousel *@
+        <CarouselComponent CarouselId="theatreCarousel"
+                           ImagesUrls="Current.ImagesUrls"
+                           Alt="Theatre Image!" />
+        <br />
+
+        @* Plays *@
+        <BSCard CardType="CardType.Title">Plays</BSCard>
+        <ul class="list-group list-group-horizontal overflow-auto">
+            <ListView Items="Current.Plays" Context="play">
+                <li class="list-group-item" @key="@($"play-num-{play.Id}")" @onclick="() => PlayClicked(play.Id)">
+                    <BSCard Class="border-0" style="min-width: 220px; min-height: 100%">
+                        <BSCard CardType="CardType.Image"
+                                VerticalAlignment="VerticalAlignment.Top"
+                                src="@play.ImagesUrls.ElementAt(0)"
+                                alt="Image of the play." />
+
+                        <BSCard CardType="CardType.Body">
+                            <BSCard CardType="CardType.Title">@play.Name</BSCard>
+                            <BSCard CardType="CardType.Subtitle">Duration: @(TimeSpan.FromHours(play.Duration).ToString())</BSCard>
+                            <BSCard CardType="CardType.Text">@play.Description</BSCard>
+                        </BSCard>
+                    </BSCard>
+                </li>
+            </ListView>
+        </ul>
+        <br />
+
+        @* Halls *@
+        <BSCard CardType="CardType.Title">Halls</BSCard>
+        <ul class="list-group list-group-horizontal overflow-auto">
+            <ListView Items="Current.Halls" Context="hall">
+                <li class="list-group-item" @key="@($"hall-num-{hall.Id}")" @onclick="() => hallModal.Show(hall)">
+                    <BSCard Class="border-0" style="min-width: 220px; min-height: 100%">
+                        <BSCard CardType="CardType.Image" 
+                                VerticalAlignment="VerticalAlignment.Top" 
+                                src="@hall.ImagesUrls.ElementAt(0)" 
+                                alt="Image of the hall." />
+
+                        <BSCard CardType="CardType.Body">
+                            <BSCard CardType="CardType.Title">Hall @hall.Name</BSCard>
+                            <BSCard CardType="CardType.Subtitle">@hall.Seats.Count Seats!</BSCard>
+                        </BSCard>
+                    </BSCard>
+                </li>
+            </ListView>
+        </ul>
+        <br />
+
+        @* Info *@
+        <BSCard CardType="CardType.Title">About</BSCard>
+        <BSCard CardType="CardType.Text">@Current.Info</BSCard>
+        <BSCard CardType="CardType.Text">@Current.Directions</BSCard>
+        <BSCard CardType="CardType.Text">@Current.Contact</BSCard>
+    </BSCard>
+}
+else
+{
+    <LoadingComponent />
+}
+
+<HallModalViewComponent @ref="hallModal" />
+
+@code {
+
+    [Parameter] public string Id { get; set; }
+
+    [Inject] ITheatreRepo TheatreRepo { get; set; }
+    [Inject] IHallRepo HallRepo { get; set; }
+    [Inject] IPlayRepo PlayRepo { get; set; }
+    [Inject] NavigationManager navigation { get; set; }
+
+    HallModalViewComponent hallModal;
+
+    public Theatre Current { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id != null)
+        {
+            Current = await TheatreRepo.Get(Id);
+            Current.Halls = (await HallRepo.Get(Current.HallsIds)).ToList();
+            Current.Plays = (await PlayRepo.Get(Current.PlaysIds)).ToList();
+        }
+    }
+
+    private void PlayClicked(string id)
+        => navigation.Navigate($"/play/{id}");
+}

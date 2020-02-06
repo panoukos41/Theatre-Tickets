@@ -1,0 +1,48 @@
+﻿<BSModal @ref="modal" IsCentered="true" Size="Size.Large" IgnoreEscape="true" IgnoreClickOnBackdrop="true">
+    <BSModalHeader>@PlayDateTime?.Play.Name - @PlayDateTime?.DateTime.ToShortDateString() - @PlayDateTime?.DateTime.ToShortTimeString()</BSModalHeader>
+    <BSModalBody>
+        @if (!bought && Rows != null)
+        {
+            <div>Seats Remaining: @seatsRemaining</div>
+            <div>Choose a seat!</div>
+            <div>Total: @(choosenSeats.Count * 10)€</div>
+            <BSTable IsResponsive="true" IsBorderless="true" IsSmall="true">
+                <tbody>
+                    <ListView Items="Rows" Context="Row">
+                        <tr class="m-0">
+                            <ListView Items="Row.ToList()" Context="Seat">
+                                <td class="m-0">
+                                    <SeatComponent Seat="Seat"
+                                                   OnClick="HandleSeatClick"
+                                                   IsTaken="PlayDateTime?.SeatsTaken.Contains(Seat) ?? false" />
+                                </td>
+                            </ListView>
+                        </tr>
+                    </ListView>
+                </tbody>
+            </BSTable>
+
+        }
+        else
+        {
+            <BSCard>
+                <BSCard CardType="CardType.Header">
+                    <BSProgress Value="100" IsStriped="true" IsAnimated="true" Class="@(loading ? null : "d-none")" />
+                </BSCard>
+                <BSCard CardType="CardType.Body">
+                    <BSCard CardType="CardType.Text">The app would take you in a different page to add email pay and them send you your ticket in pdf format to your email.</BSCard>
+                    <BSCard CardType="CardType.Text">As this is a demo it can't do that and will just simulate a buying action!</BSCard>
+                    <BSCard CardType="CardType.Text">The download button wont work either.</BSCard>
+                    <BSCard CardType="CardType.Text">Thanks for viewing my demo :D !!!</BSCard>
+                </BSCard>
+                <BSCard CardType="CardType.Footer">
+                    <BSButton IsDisabled="loading" OnClick="() => HandleDownload()">Download</BSButton>
+                </BSCard>
+            </BSCard>
+        }
+    </BSModalBody>
+    <BSModalFooter>
+        <BSButton IsDisabled="@(bought || choosenSeats.Count == 0)" OnClick="HandleBuy" Color="Color.Primary">BUY</BSButton>
+        <BSButton IsDisabled="loading" OnClick="Close" Color="Color.Secondary">CLOSE</BSButton>
+    </BSModalFooter>
+</BSModal>

@@ -1,0 +1,42 @@
+﻿html, body {
+    height: 100vh;
+}
+
+body {
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+.main-container-wrap {
+    display: flex;
+    flex-flow: column;
+    min-height: 100vh;
+    /*Stay below fixed navbar*/
+    padding-top: 54px !important;
+}
+
+.main-content-wrap {
+    flex-grow: 1;
+}
+
+.main-footer-wrap {
+    margin-top: 40px;
+    margin-bottom: 10px;
+}
+
+.main-container-wrap, .main-content-wrap, .main-footer-wrap {
+    flex-shrink: 0;
+}
+
+@media screen and (max-width:575px) {
+    .main-container-wrap, .main-content-wrap, .main-footer-wrap {
+        margin-left: 0px;
+        margin-right: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+        border-left: 0px;
+        border-right: 0px;
+    }
+}

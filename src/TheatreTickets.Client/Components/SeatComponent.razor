@@ -1,0 +1,18 @@
+﻿<div class="seat @(IsTaken ? "seat-bg-red" : "seat-bg-green") @(IsSelected ? "seat-selected" : null)" 
+     @onclick="() => OnClick.InvokeAsync(this)"></div>
+
+@code {
+    [Parameter] public Seat Seat { get; set; }
+
+    [Parameter] public bool IsTaken { get; set; }
+
+    [Parameter] public bool IsSelected { get; set; }
+
+    [Parameter] public EventCallback<SeatComponent> OnClick { get; set; }
+
+    public void SetSelected(bool selection) 
+    {
+        IsSelected = selection;
+        StateHasChanged();
+    }
+}

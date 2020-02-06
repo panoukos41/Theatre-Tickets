@@ -1,0 +1,59 @@
+﻿@* Carousel *@
+<div id="@CarouselId" class="carousel slide card" style="max-height: @MaxHeight" data-ride="carousel">
+
+    @* Indicators *@
+    <ol class="carousel-indicators">
+        @for (int i = 0; i < ImagesUrls.Count(); i++)
+        {
+            string liClass = i == 0 ? "active" : string.Empty;
+            <li class="@liClass" data-target="@carouselIdTarget" data-slide-to="@i"></li>
+        }
+    </ol>
+
+    @* Slides *@
+    <div class="carousel-inner">
+        @for (int i = 0; i < ImagesUrls.Count(); i++)
+        {
+            string imageUrl = ImagesUrls.ElementAt(i);
+            string itemClass = i == 0 ? "carousel-item active" : "carousel-item";
+
+            <div class="@itemClass" style="@imageContainerStyle">
+                <img src="@imageUrl" alt="@Alt">
+            </div>
+        }
+    </div>
+
+    @* Buttons *@
+    <a class="carousel-control-prev" href="@carouselIdTarget" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">@PreviousText</span>
+    </a>
+    <a class="carousel-control-next" href="@carouselIdTarget" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">@NextText</span>
+    </a>
+</div>
+
+@code {
+    [Parameter] public IEnumerable<string> ImagesUrls { get; set; }
+
+    [Parameter] public string CarouselId { get; set; }
+
+    [Parameter] public string Alt { get; set; } = "A beautifull image!";
+
+    [Parameter] public string NextText { get; set; } = "Next";
+
+    [Parameter] public string PreviousText { get; set; } = "Previous";
+
+    [Parameter] public string MaxHeight { get; set; } = "350px";
+
+    private string carouselIdTarget => $"#{CarouselId}";
+    private string imageContainerStyle { get; set; }
+
+    protected override void OnInitialized()
+    {
+        imageContainerStyle = $"max-height:{MaxHeight}; width: 100%; overflow: hidden";
+        if (CarouselId == null)
+            CarouselId = Guid.NewGuid().ToString();
+    }
+}

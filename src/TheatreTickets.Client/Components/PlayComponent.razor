@@ -1,0 +1,52 @@
+﻿@code {
+    [Parameter] public Play Play { get; set; } = null!;
+
+    [Parameter] public string CarouselMaxHeight { get; set; } = "250px";
+
+    [Parameter] public EventCallback OnClick { get; set; }
+
+    [Parameter] public EventCallback TheatreOnClick { get; set; }
+}
+
+@if (Play != null)
+{
+    <BSCard Class="border-0">
+        <BSCard CardType="CardType.Body">
+            @* Title *@
+            <BSCard CardType="CardType.Title">@Play.Name</BSCard>
+
+            @* Carousel *@
+            <CarouselComponent CarouselId="@($"play-{Play.Id}")"
+                               ImagesUrls="@Play.ImagesUrls"
+                               MaxHeight="@CarouselMaxHeight"
+                               Alt="A theatre image!" />
+
+            @* Info *@
+            <div @onclick="@(() => OnClick.InvokeAsync(this))">
+                <BSCard CardType="CardType.Text">Duration: @Play.Duration hours!</BSCard>
+                <BSCard CardType="CardType.Text">Seats Remaining: @(Play.PlayDateTimes.FirstOrDefault().Hall.Seats.Count - Play.PlayDateTimes.FirstOrDefault().SeatsTaken.Count)</BSCard>
+                <BSCard CardType="CardType.Text">@Play.Description</BSCard>
+                <BSCard CardType="CardType.Text">At: @Play.Theatre.Name</BSCard>
+            </div>
+
+            <BSButton Class="mx-0"
+                      IsOutline="true"
+                      Color="Color.Primary"
+                      OnClick="() => OnClick.InvokeAsync(this)">
+                Take me to this play!
+            </BSButton>
+
+            <BSButton Class="m-0"
+                      IsOutline="true"
+                      Color="Color.Secondary"
+                      OnClick="() => TheatreOnClick.InvokeAsync(this)">
+                Visit @Play.Theatre.Name
+            </BSButton>
+        </BSCard>
+        <hr />
+    </BSCard>
+}
+else
+{
+    <LoadingComponent />
+}

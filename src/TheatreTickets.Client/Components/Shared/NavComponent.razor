@@ -1,0 +1,38 @@
+﻿<nav>
+    <a href="">Theatre Tickets</a>
+
+    <button type="button" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon" />
+    </button>
+
+    <div class="@NavMenuCssClass">
+        <ul>
+            <li>
+                <NavLink href="" Match="NavLinkMatch.All">
+                    Theatres
+                </NavLink>
+            </li>
+            <li>
+                <NavLink href="plays">
+                    Plays
+                </NavLink>
+            </li>
+            <li>
+                <NavLink href="about">
+                    About
+                </NavLink>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+@code {
+    [Parameter] public bool CollapseNavMenu { get; set; } = true;
+
+    private string NavMenuCssClass => CollapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        CollapseNavMenu = !CollapseNavMenu;
+    }
+}

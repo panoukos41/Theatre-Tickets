@@ -1,0 +1,53 @@
+﻿@page "/plays"
+
+@if (Plays != null)
+{
+    <ListView Items="Plays" Context="play">
+        <PlayComponent @key="play.Id"
+                       Play="play"
+                       CarouselMaxHeight="30vh"
+                       OnClick="() => PlayClicked(play.Id)"
+                       TheatreOnClick="() => TheatreClicked(play.TheatreId)" />
+        <br />
+    </ListView>
+}
+else
+{
+    <LoadingComponent />
+}
+
+@code {
+    [Inject] IPlayRepo PlayRepo { get; set; }
+    [Inject] ITheatreRepo TheatreRepo { get; set; }
+    [Inject] IPlayDateTimeRepo PlayDateTimeRepo { get; set; }
+    [Inject] IHallRepo HallRepo { get; set; }
+    [Inject] NavigationManager navigation { get; set; }
+
+    protected IEnumerable<Play> Plays { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Plays = await PlayRepo.Get();
+        foreach (Play play in Plays)
+        {
+            play.Theatre = await TheatreRepo.Get(play.TheatreId);
+
+            if (play.PlayDateTimesIds.FirstOrDefault() is string dateTimeId)
+            {
+                play.PlayDateTimes = new List<PlayDateTime>();
+                play.PlayDateTimes.Add(await PlayDateTimeRepo.Get(dateTimeId));
+                foreach (var playdatetime in play.PlayDateTimes)
+                {
+                    playdatetime.Play = play;
+                    playdatetime.Hall = await HallRepo.Get(playdatetime.HallId);
+                }
+            }
+        }
+    }
+
+    private void PlayClicked(string id)
+        => navigation.Navigate($"/play/{id}");
+
+    private void TheatreClicked(string id)
+        => navigation.Navigate($"/theatre/{id}");
+}

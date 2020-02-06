@@ -1,0 +1,38 @@
+﻿@page "/"
+@* Display all the theatres! *@
+@if (Theatres != null && Theatres.Count() > 1)
+{
+    <ListView Items="Theatres" Context="theatre">
+        <TheatreComponent @key="theatre.Id"
+                          Theatre="theatre"
+                          CarouselMaxHeight="25vh"
+                          OnClick="() => TheatreClicked(theatre.Id)" />
+        <br />
+    </ListView>
+}
+else if (Theatres != null && Theatres.Count() == 1)
+{
+    <TheatreComponent Theatre="@Theatres.ElementAt(0)"
+                      CarouselMaxHeight="55vh"
+                      OnClick="() => TheatreClicked(Theatres.ElementAt(0).Id)" />
+}
+else
+{
+    <LoadingComponent />
+}
+
+@code {
+
+    [Inject] ITheatreRepo TheatresRepo { get; set; }
+    [Inject] NavigationManager navigation { get; set; }
+
+    private IEnumerable<Theatre> Theatres;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Theatres = await TheatresRepo.Get();
+    }
+
+    private void TheatreClicked(string id)
+        => navigation.Navigate($"/theatre/{id}");
+}

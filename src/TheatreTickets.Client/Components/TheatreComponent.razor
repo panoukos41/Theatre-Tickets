@@ -1,0 +1,36 @@
+﻿@code {
+    [Parameter] public Theatre Theatre { get; set; } = null!;
+
+    [Parameter] public string CarouselMaxHeight { get; set; } = "250px";
+
+    [Parameter] public EventCallback OnClick { get; set; }
+}
+
+@if (Theatre != null)
+{
+    <BSCard Class="border-0">
+        <BSCard CardType="CardType.Body">
+            @* Title *@
+            <BSCard CardType="CardType.Title">@Theatre.Name</BSCard>
+
+            @* Carousel *@
+            <CarouselComponent CarouselId="@($"carousel-{Theatre.Id}")"
+                               ImagesUrls="@Theatre.ImagesUrls"
+                               MaxHeight="@CarouselMaxHeight"
+                               Alt="A theatre image!" />
+
+            @* Info *@
+            <div @onclick="@(() => OnClick.InvokeAsync(this))">
+                <BSCard CardType="CardType.Text" Class="">@Theatre.Info</BSCard>
+                <BSCard CardType="CardType.Text">@Theatre.Directions</BSCard>
+                <BSCard CardType="CardType.Text">@Theatre.Contact</BSCard>
+                <BSButton IsOutline="true">Take me to @Theatre.Name</BSButton>
+            </div>
+        </BSCard>
+        <hr />
+    </BSCard>
+}
+else
+{
+    <LoadingComponent />
+}
